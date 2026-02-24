@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flipkart — India's #1 Online Shopping Site</title>
+  <meta name="description" content="Shop online for electronics, fashion, home appliances, books, sports, beauty and more at the best prices. Free delivery on eligible orders.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232874f0'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial' font-weight='bold' font-size='18' fill='white'%3EF%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- ====================== HEADER ====================== -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo" onclick="showPage('home')" style="cursor:pointer">
+      <div>
+        <div class="logo-text">Flipkart</div>
+        <div class="logo-sub">✨ Explore Plus</div>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <div class="search-input-wrap">
+        <input class="search-input" id="searchInput" type="text" placeholder="Search for products, brands and more" autocomplete="off">
+        <button class="search-btn" onclick="doSearch()">🔍</button>
+      </div>
+      <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+
+    <div class="header-actions">
+      <button class="header-btn" onclick="openLogin()"><span class="icon">👤</span><span>Login</span></button>
+
+      <button class="header-btn" onclick="showPage('wishlist');renderWishlist()" style="position:relative">
+        <span class="icon">❤️</span><span>Wishlist</span>
+        <span class="badge wishlist-count" style="display:none">0</span>
+      </button>
+
+      <button class="header-btn" onclick="showPage('cart');renderCart()" style="position:relative">
+        <span class="icon">🛒</span><span>Cart</span>
+        <span class="badge cart-count" style="display:none">0</span>
+      </button>
+
+      <div class="dropdown-wrap">
+        <button class="header-btn"><span class="icon">☰</span><span>More</span></button>
+        <div class="dropdown-menu">
+          <div class="dropdown-item" onclick="filterCategory('electronics')">📱 Electronics</div>
+          <div class="dropdown-item" onclick="filterCategory('fashion')">👗 Fashion</div>
+          <div class="dropdown-item" onclick="filterCategory('home')">🏠 Home & Kitchen</div>
+          <div class="dropdown-item" onclick="filterCategory('books')">📚 Books</div>
+          <div class="dropdown-item" onclick="filterCategory('sports')">⚽ Sports</div>
+          <div class="dropdown-item" onclick="filterCategory('beauty')">💄 Beauty</div>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item" onclick="openLogin()">🔑 Login / Sign Up</div>
+          <div class="dropdown-item" onclick="showPage('cart');renderCart()">🛒 My Cart</div>
+          <div class="dropdown-item" onclick="showPage('wishlist');renderWishlist()">❤️ My Wishlist</div>
+          <div class="dropdown-item">📦 My Orders</div>
+          <div class="dropdown-item">💳 Flipkart Pay</div>
+          <div class="dropdown-item">🎁 Gift Cards</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ====================== CATEGORY NAV ====================== -->
+<nav class="cat-nav">
+  <div class="cat-nav-inner" id="catNav"></div>
+</nav>
+
+<!-- ====================== BREADCRUMB ====================== -->
+<div style="background:#fff;display:none" id="breadcrumbWrap">
+  <div class="container">
+    <nav class="breadcrumb" id="breadcrumbBar"></nav>
+  </div>
+</div>
+
+<!-- ====================== MAIN CONTENT ====================== -->
+<main>
+
+  <!-- ===== HOME PAGE ===== -->
+  <div id="homePage">
+    <!-- Hero Banner -->
+    <div class="hero">
+      <div class="hero-track" id="heroTrack"></div>
+      <button class="hero-arrow hero-prev" onclick="goHero(heroIdx-1)">‹</button>
+      <button class="hero-arrow hero-next" onclick="goHero(heroIdx+1)">›</button>
+      <div class="hero-controls" id="heroDots"></div>
+    </div>
+
+    <div class="container">
+      <!-- Offers Bar -->
+      <div style="display:flex;gap:12px;margin:16px 0;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px;background:#fff;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm)">
+          <span style="font-size:28px">🚀</span>
+          <div><div style="font-size:13px;font-weight:700">Free Delivery</div><div style="font-size:12px;color:var(--text-secondary)">On orders above ₹499</div></div>
+        </div>
+        <div style="flex:1;min-width:200px;background:#fff;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm)">
+          <span style="font-size:28px">🔄</span>
+          <div><div style="font-size:13px;font-weight:700">10 Day Returns</div><div style="font-size:12px;color:var(--text-secondary)">Hassle-free returns</div></div>
+        </div>
+        <div style="flex:1;min-width:200px;background:#fff;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm)">
+          <span style="font-size:28px">🔒</span>
+          <div><div style="font-size:13px;font-weight:700">Secure Payments</div><div style="font-size:12px;color:var(--text-secondary)">100% secure checkout</div></div>
+        </div>
+        <div style="flex:1;min-width:200px;background:#fff;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm)">
+          <span style="font-size:28px">📞</span>
+          <div><div style="font-size:13px;font-weight:700">24/7 Support</div><div style="font-size:12px;color:var(--text-secondary)">Dedicated customer care</div></div>
+        </div>
+      </div>
+
+      <!-- Flash Deals -->
+      <div class="section">
+        <div class="section-card">
+          <div class="section-header">
+            <div>
+              <div class="section-title">⚡ Flash Deals</div>
+              <div class="section-subtitle">Hurry, limited stock!</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px">
+              <div class="deal-timer">
+                <span class="deal-label">Ends in</span>
+                <div id="dealTimer"></div>
+              </div>
+              <button class="view-all-btn" onclick="filterCategory('all')">View All</button>
+            </div>
+          </div>
+          <div class="h-scroll-wrap" id="flashDealsStrip"></div>
+        </div>
+      </div>
+
+      <!-- Shop By Category -->
+      <div class="section">
+        <div class="section-card">
+          <div class="section-header">
+            <div><div class="section-title">🛍️ Shop By Category</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:16px" id="homeCatGrid">
+            <!-- filled by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner Strip -->
+      <div class="section">
+        <div class="banner-strip">
+          <div class="banner-item" onclick="filterCategory('electronics')">
+            <img src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80" alt="Electronics Sale" onerror="this.parentElement.style.background='linear-gradient(135deg,#2874f0,#1a3fcb)'">
+            <div class="banner-overlay"><h3>Big Electronics Sale</h3><p>Up to 50% off on top brands</p></div>
+          </div>
+          <div class="banner-item" onclick="filterCategory('fashion')">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Fashion Sale" onerror="this.parentElement.style.background='linear-gradient(135deg,#e91e63,#c2185b)'">
+            <div class="banner-overlay"><h3>Fashion Fiesta</h3><p>Trending styles at best prices</p></div>
+          </div>
+          <div class="banner-item" onclick="filterCategory('home')">
+            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" alt="Home Sale" onerror="this.parentElement.style.background='linear-gradient(135deg,#ff9800,#f57c00)'">
+            <div class="banner-overlay"><h3>Home Essentials</h3><p>Free installation on appliances</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Rated Products -->
+      <div class="section">
+        <div class="section-card">
+          <div class="section-header">
+            <div><div class="section-title">⭐ Top Rated Products</div><div class="section-subtitle">Highest customer ratings</div></div>
+            <button class="view-all-btn" onclick="filterCategory('all')">View All</button>
+          </div>
+          <div class="products-grid" id="topPicksGrid"></div>
+        </div>
+      </div>
+
+      <!-- Trending Now -->
+      <div class="section">
+        <div class="section-card">
+          <div class="section-header">
+            <div><div class="section-title">🔥 Trending Now</div></div>
+            <button class="view-all-btn" onclick="filterCategory('all')">View All</button>
+          </div>
+          <div class="h-scroll-wrap" id="trendingStrip"></div>
+        </div>
+      </div>
+
+      <!-- Bestsellers -->
+      <div class="section">
+        <div class="section-card">
+          <div class="section-header">
+            <div><div class="section-title">🏆 Bestsellers</div><div class="section-subtitle">Most loved by customers</div></div>
+            <button class="view-all-btn" onclick="filterCategory('all')">View All</button>
+          </div>
+          <div class="products-grid" id="bestsellersGrid"></div>
+        </div>
+      </div>
+
+      <!-- Another Banner -->
+      <div class="section">
+        <div class="banner-strip">
+          <div class="banner-item" onclick="filterCategory('books')" style="height:140px">
+            <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80" alt="Books" onerror="this.parentElement.style.background='linear-gradient(135deg,#4caf50,#388e3c)'">
+            <div class="banner-overlay"><h3>📚 Books & More</h3><p>Up to 70% off bestsellers</p></div>
+          </div>
+          <div class="banner-item" onclick="filterCategory('sports')" style="height:140px">
+            <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&q=80" alt="Sports" onerror="this.parentElement.style.background='linear-gradient(135deg,#2196f3,#1565c0)'">
+            <div class="banner-overlay"><h3>⚽ Sports Gear</h3><p>Best brands at lowest prices</p></div>
+          </div>
+          <div class="banner-item" onclick="filterCategory('beauty')" style="height:140px">
+            <img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=600&q=80" alt="Beauty" onerror="this.parentElement.style.background='linear-gradient(135deg,#e91e63,#880e4f)'">
+            <div class="banner-overlay"><h3>💄 Beauty & Care</h3><p>Premium brands on sale</p></div>
+          </div>
+          <div class="banner-item" onclick="filterCategory('grocery')" style="height:140px">
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80" alt="Grocery" onerror="this.parentElement.style.background='linear-gradient(135deg,#8bc34a,#558b2f)'">
+            <div class="banner-overlay"><h3>🛒 Grocery</h3><p>Fresh & organic delivered fast</p></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /container -->
+  </div><!-- /homePage -->
+
+  <!-- ===== PRODUCTS PAGE ===== -->
+  <div id="productsPage" class="hidden">
+    <div class="container" style="padding-top:16px;padding-bottom:24px">
+      <div class="plp-layout">
+        <!-- Filter Sidebar -->
+        <div class="filter-sidebar" id="filterSidebar"></div>
+        <!-- Product Grid -->
+        <div>
+          <div class="sort-bar">
+            <span class="sort-label">Sort By:</span>
+            <div class="sort-options">
+              <div class="sort-option active" onclick="setSort('popular',this)">Popularity</div>
+              <div class="sort-option" onclick="setSort('price_asc',this)">Price: Low to High</div>
+              <div class="sort-option" onclick="setSort('price_desc',this)">Price: High to Low</div>
+              <div class="sort-option" onclick="setSort('rating',this)">Rating</div>
+              <div class="sort-option" onclick="setSort('new',this)">Newest First</div>
+            </div>
+            <span class="results-info" id="resultsInfo"></span>
+            <div class="view-toggle">
+              <div class="view-btn active" onclick="setView('grid',this)" title="Grid view">⊞</div>
+              <div class="view-btn" onclick="setView('list',this)" title="List view">☰</div>
+            </div>
+            <!-- Mobile filter btn -->
+            <button style="display:none;padding:6px 14px;border:1px solid var(--border);border-radius:4px;font-size:13px;font-weight:600" id="mobileFilterBtn" onclick="document.getElementById('filterSidebar').classList.toggle('mobile-open')">⚙️ Filter</button>
+          </div>
+          <div class="products-grid" id="productsGrid" style="background:var(--card);border-radius:0 0 8px 8px;padding:16px;box-shadow:var(--shadow-sm)"></div>
+          <div class="pagination" id="pagination">
+            <div class="page-btn active">1</div><div class="page-btn">2</div><div class="page-btn">3</div><span class="page-dots">…</span><div class="page-btn">10</div>
+            <div class="page-btn">›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRODUCT DETAIL PAGE ===== -->
+  <div id="productDetailPage" class="hidden">
+    <div class="container" style="padding-top:16px;padding-bottom:32px" id="pdpContainer"></div>
+  </div>
+
+  <!-- ===== CART PAGE ===== -->
+  <div id="cartPage" class="hidden">
+    <div class="container" style="padding-top:16px;padding-bottom:32px" id="cartContainer"></div>
+  </div>
+
+  <!-- ===== CHECKOUT PAGE ===== -->
+  <div id="checkoutPage" class="hidden">
+    <div class="container" style="padding-top:16px;padding-bottom:32px" id="checkoutContainer"></div>
+  </div>
+
+  <!-- ===== ORDER CONFIRM PAGE ===== -->
+  <div id="orderConfirmPage" class="hidden">
+    <div class="container" style="padding-top:24px;padding-bottom:48px" id="orderConfirmContainer"></div>
+  </div>
+
+  <!-- ===== WISHLIST PAGE ===== -->
+  <div id="wishlistPage" class="hidden">
+    <div class="container" style="padding-top:16px;padding-bottom:32px">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">❤️ My Wishlist</div>
+        </div>
+        <div id="wishlistContainer"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ====================== FOOTER ====================== -->
+<footer>
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-col-title">About</div>
+          <div class="footer-links">
+            <span class="footer-link">About Us</span>
+            <span class="footer-link">Careers</span>
+            <span class="footer-link">Press</span>
+            <span class="footer-link">Flipkart Stories</span>
+            <span class="footer-link">Wholesale</span>
+            <span class="footer-link">Corporate Information</span>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Help</div>
+          <div class="footer-links">
+            <span class="footer-link">Payments</span>
+            <span class="footer-link">Shipping</span>
+            <span class="footer-link">Cancellation & Returns</span>
+            <span class="footer-link">FAQ</span>
+            <span class="footer-link">Report Infringement</span>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Policy</div>
+          <div class="footer-links">
+            <span class="footer-link">Return Policy</span>
+            <span class="footer-link">Terms of Use</span>
+            <span class="footer-link">Security</span>
+            <span class="footer-link">Privacy</span>
+            <span class="footer-link">Sitemap</span>
+            <span class="footer-link">EMI Policy</span>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Social</div>
+          <div class="footer-links">
+            <span class="footer-link">🐦 Twitter</span>
+            <span class="footer-link">📘 Facebook</span>
+            <span class="footer-link">📸 Instagram</span>
+            <span class="footer-link">▶️ YouTube</span>
+          </div>
+          <div class="footer-col-title" style="margin-top:20px">Mail Us</div>
+          <div style="color:#ccc;font-size:13px;line-height:1.7">
+            Flipkart Internet Pvt Ltd,<br>
+            Buildings Alyssa, Begonia &<br>
+            Clove Embassy Tech Village,<br>
+            Bangalore – 560103, India
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Become a Seller</div>
+          <div class="footer-links">
+            <span class="footer-link">Advertise</span>
+            <span class="footer-link">Gift Cards</span>
+            <span class="footer-link">Help Centre</span>
+          </div>
+          <div style="margin-top:20px">
+            <div class="footer-col-title">Newsletter</div>
+            <div class="newsletter-form">
+              <input class="newsletter-input" placeholder="Your email address">
+              <button class="newsletter-btn">Subscribe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="footer-bottom-inner">
+        <div class="footer-brand">
+          <div>
+            <div class="footer-brand-text">Flipkart</div>
+            <div class="footer-brand-sub">© 2025 · Clone Project</div>
+          </div>
+        </div>
+        <div class="footer-copy">
+          🔒 &nbsp;Secured with SSL &nbsp;|&nbsp; All major payments accepted
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" style="height:20px;filter:brightness(0) invert(0.7)" alt="Visa" onerror="this.style.display='none'">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" style="height:20px;filter:brightness(0) invert(0.7)" alt="Mastercard" onerror="this.style.display='none'">
+          <span style="color:#888;font-size:20px">🏦</span>
+          <span style="color:#888;font-size:20px">📱</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ====================== LOGIN MODAL ====================== -->
+<div class="modal-overlay modal-wrap" id="loginModal" onclick="if(event.target===this)closeLogin()">
+  <div class="modal">
+    <div class="modal-left">
+      <h2>Login</h2>
+      <p>Get access to your Orders, Wishlist and Recommendations</p>
+      <div class="modal-illustration">🛍️</div>
+      <p style="font-size:12px;opacity:0.7">New here? Create an account to start shopping with exclusive discounts!</p>
+    </div>
+    <div class="modal-right" style="position:relative">
+      <button class="modal-close" onclick="closeLogin()">✕</button>
+      <div class="modal-tabs">
+        <div class="modal-tab active" data-tab="login" onclick="switchAuthTab('login')">Login</div>
+        <div class="modal-tab" data-tab="signup" onclick="switchAuthTab('signup')">Sign Up</div>
+      </div>
+      <!-- Login Form -->
+      <div id="loginForm" class="auth-form">
+        <div class="form-title">Welcome back!</div>
+        <div class="form-sub">Enter your credentials to access your account</div>
+        <form onsubmit="doLogin(event)">
+          <div class="form-group"><label class="form-label">Email or Mobile</label><input class="form-input" required placeholder="Email / 10-digit mobile" autocomplete="username"></div>
+          <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" required placeholder="Enter password" autocomplete="current-password"></div>
+          <div style="text-align:right;margin-bottom:16px"><span style="font-size:12px;color:var(--primary);cursor:pointer">Forgot Password?</span></div>
+          <button type="submit" class="btn-primary">Login →</button>
+        </form>
+        <div class="divider"><span>OR</span></div>
+        <div class="social-login">
+          <button class="social-btn" onclick="closeLogin();showToast('Google login coming soon','info')">🔴 Google</button>
+          <button class="social-btn" onclick="closeLogin();showToast('Facebook login coming soon','info')">🔵 Facebook</button>
+        </div>
+      </div>
+      <!-- Signup Form -->
+      <div id="signupForm" class="auth-form hidden">
+        <div class="form-title">Create Account</div>
+        <div class="form-sub">Join millions of happy shoppers</div>
+        <form onsubmit="doSignup(event)">
+          <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" required placeholder="Your full name"></div>
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" required placeholder="you@example.com"></div>
+          <div class="form-group"><label class="form-label">Mobile Number</label><input class="form-input" type="tel" required placeholder="10-digit mobile" maxlength="10"></div>
+          <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" required placeholder="Create password" minlength="6"></div>
+          <button type="submit" class="btn-primary">Create Account →</button>
+        </form>
+        <div class="divider"><span>OR</span></div>
+        <div class="social-login">
+          <button class="social-btn" onclick="closeLogin();showToast('Google signup coming soon','info')">🔴 Sign up with Google</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== QUICK VIEW MODAL ====================== -->
+<div class="modal-overlay" id="quickViewModal" onclick="if(event.target===this)closeQuickView()">
+  <div class="modal" style="grid-template-columns:1fr;max-width:680px">
+    <div style="position:relative;padding:24px">
+      <button class="modal-close" onclick="closeQuickView()">✕</button>
+      <div id="quickViewContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== TOAST CONTAINER ====================== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ====================== SCRIPTS ====================== -->
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+  // Sort & View helpers
+  function setSort(val, el) {
+    State.currentSort = val;
+    document.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+    renderProducts();
+  }
+  function setView(val, el) {
+    State.currentView = val;
+    document.querySelectorAll('.view-btn').forEach(o => o.classList.remove('active'));
+    el.classList.add('active');
+    renderProducts();
+  }
+
+  // Mobile filter button visibility
+  function checkMobileFilter() {
+    const btn = document.getElementById('mobileFilterBtn');
+    if (btn) btn.style.display = window.innerWidth <= 768 ? 'block' : 'none';
+  }
+  window.addEventListener('resize', checkMobileFilter);
+  checkMobileFilter();
+</script>
+
+</body>
+</html>
