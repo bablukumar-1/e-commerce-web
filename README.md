@@ -4,6 +4,7 @@
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=github&logoColor=white)
+![Deploy](https://github.com/bablukumar-1/e-commerce-web/actions/workflows/deploy.yml/badge.svg)
 
 > A fully-featured, responsive e-commerce website inspired by Flipkart — built with pure HTML, CSS, and Vanilla JavaScript. No frameworks, no dependencies!
 
