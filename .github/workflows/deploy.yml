@@ -1,0 +1,89 @@
+name: 🚀 Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # ---- Lint & Validate ----
+  validate:
+    name: ✅ Validate Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          echo "🔍 Checking required files..."
+          for file in index.html style.css app.js data.js README.md; do
+            if [ -f "$file" ]; then
+              echo "✅ $file found ($(wc -l < $file) lines)"
+            else
+              echo "❌ $file is MISSING!"
+              exit 1
+            fi
+          done
+          echo "✅ All required files present!"
+
+      - name: Check HTML structure
+        run: |
+          echo "🔍 Validating HTML structure..."
+          if grep -q "<!DOCTYPE html>" index.html; then
+            echo "✅ DOCTYPE declaration found"
+          else
+            echo "⚠️  DOCTYPE missing"
+          fi
+          if grep -q "<title>" index.html; then
+            echo "✅ Title tag found"
+          fi
+          if grep -q "viewport" index.html; then
+            echo "✅ Viewport meta tag found"
+          fi
+          echo "📊 File sizes:"
+          du -sh index.html style.css app.js data.js
+
+  # ---- Deploy to GitHub Pages ----
+  deploy:
+    name: 🌐 Deploy to GitHub Pages
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Print deployment URL
+        run: |
+          echo "🎉 Successfully deployed!"
+          echo "🔗 Live at: ${{ steps.deployment.outputs.page_url }}"
